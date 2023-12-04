@@ -5,6 +5,7 @@ import { Provider } from 'react-redux';
 // import store from './store';
 import App from "./App";
 import reportWebVitals from './reportWebVitals';
+import { AuthProvider } from "./Components/context/AuthProvider";
 
 const root = createRoot(document.getElementById('root')); 
 
@@ -12,7 +13,9 @@ root.render(
   <React.StrictMode>
     <BrowserRouter>
       {/* <Provider store={store}> */}
+      <AuthProvider>
         <App />
+        </AuthProvider>
       {/* </Provider> */}
     </BrowserRouter>
   </React.StrictMode>
