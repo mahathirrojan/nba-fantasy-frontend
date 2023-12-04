@@ -3,7 +3,8 @@ import { faCheck, faTimes, faInfoCircle } from "@fortawesome/free-solid-svg-icon
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import './Register.css'
 import axios from '../api/axios'
-
+import { Routes, Route, Link } from 'react-router-dom';
+import Login from './Login';
 
 
 // User Regex: Allows alphanumeric characters (lowercase/uppercase) and underscores, with a length between 3 and 20 characters.
@@ -92,7 +93,7 @@ const Register = () => {
     {success ? (
         <section>
             <h1>Success</h1><p>
-                <a href="#">Sign In</a>
+            <Link to="/login">Sign In</Link>
             </p>
         </section>
     ) : (
@@ -183,7 +184,7 @@ const Register = () => {
         <p>
             Already a member?<br /> 
             <span className="line">
-                <a href="#">Sign In</a>
+            <Link to="/login">Sign In</Link>
             </span>
         </p>
     </section>
