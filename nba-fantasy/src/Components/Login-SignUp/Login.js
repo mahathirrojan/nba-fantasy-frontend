@@ -4,6 +4,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import './Register.css'
 import axios from '../api/axios'
 import AuthContext from '../context/AuthProvider';
+import { Link } from "react-router-dom"
+import Register from './Register';
+import { useAuth } from '../context/AuthProvider';
 
 
 const login_url = '/auth'
@@ -97,7 +100,7 @@ const Login = () => {
             New Here?<br />
             {/* register router goes here  */}
             <span>
-            <a href="#">Sign Up!</a>
+            <Link to="/register">Sign Up</Link>
             </span>
         </p>
     </section>
