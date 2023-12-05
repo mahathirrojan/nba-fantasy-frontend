@@ -67,8 +67,8 @@ const Login = () => {
                 <h1>You are logged in!</h1>
                 <br />
                 <p>
-                    {/* This is where the router to Home should be  */}
-                    <a href="#">Go to Home</a>
+                    {/* This is where the router to Team should be  */}
+                    <Link to="/home">Go To Home</Link>
                 </p>
             </section>
         ) : (
