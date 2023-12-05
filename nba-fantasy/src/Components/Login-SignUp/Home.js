@@ -22,7 +22,7 @@ const Home = ({ isAuthenticated }) => {
         <Link to="/login" className="login-button">
           Login
         </Link>
-        <Link to="/signup" className="signup-button">
+        <Link to="/register" className="signup-button">
           Sign Up
         </Link>
       </div>
