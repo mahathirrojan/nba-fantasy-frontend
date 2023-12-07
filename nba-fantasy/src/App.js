@@ -1,6 +1,6 @@
 import './index.css';
 import { Routes, Route, Link, Navigate } from 'react-router-dom';
-import { AuthProvider, useAuth } from './Components/context/AuthProvider';
+import { AuthProvider, UseAuth } from './Components/context/AuthProvider';
 
 import Login from './Components/Login-SignUp/Login';
 import Register from './Components/Login-SignUp/Register';
@@ -9,7 +9,7 @@ import Team from './Components/Sports/Team';
 import Home from './Components/Login-SignUp/Home';
 
 function App() {
-  const auth = useAuth();
+  const auth = UseAuth();
 
   return (
     <AuthProvider>

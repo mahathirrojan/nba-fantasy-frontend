@@ -68,7 +68,7 @@ const Register = () => {
             // prevents accidental enabling of the button
         }
         try{
-            const response = await axios.post(register_url, JSON.stringify({user, pwd}), {headers: { 'Content-Type' : 'application/json'}, withCredentials: true}
+            const response = await axios.post("http://localhost:5001/user/", JSON.stringify({user, pwd}), {headers: { 'Content-Type' : 'application/json'}, withCredentials: true}
             );
             console.log(response.data);
             console.log(response.accessToken);
