@@ -41,9 +41,8 @@ const Login = () => {
         console.log(JSON.stringify(response?.data));
         // console.log(JSON.stringify(response));
         const accessToken = response?.data.accessToken;
-        console.log(accessToken);
-
-        signin({ user, pwd, accessToken });
+        const roles = response?.data?.roles; 
+        UseAuth({ user});
         setUser('');
         setPwd('');
         setSuccess(true);
