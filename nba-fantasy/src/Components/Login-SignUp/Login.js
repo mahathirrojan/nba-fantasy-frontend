@@ -6,12 +6,12 @@ import axios from '../api/axios'
 import AuthContext from '../context/AuthProvider';
 import { Link } from "react-router-dom"
 import Register from './Register';
-import { useAuth } from '../context/AuthProvider';
+import { UseAuth } from '../context/AuthProvider';
 
 
-const login_url = '/auth'
+
 const Login = () => {
-    const { setAuth } = useContext(AuthContext);
+    const { signin } = UseAuth();
     const userRef = useRef();
     const errRef = useRef(); 
 
@@ -32,7 +32,7 @@ const Login = () => {
         e.preventDefault(); 
 
         try{
-            const response = await axios.post(login_url, JSON.stringify({user, pwd}),
+            const response = await axios.post("http://localhost:5001/auth/", JSON.stringify({user, pwd}),
             {
                 headers: {'Content-Type': 'application/json'},
                 withCredentials: true
@@ -42,23 +42,25 @@ const Login = () => {
         // console.log(JSON.stringify(response));
         const accessToken = response?.data.accessToken;
         const roles = response?.data?.roles; 
-        setAuth({ user, pwd, roles, accessToken });
+        signin({ user, pwd, accessToken });
         setUser('');
         setPwd('');
         setSuccess(true);
 
-        } catch(err){
-            if (!err?.response){
-                setErrMsg('No Response from Server')
-            } else if (err.response?.status === 400){
-                setErrMsg('Missing Username or Password')
-            } else if (err.response?.status === 401){
+        } catch (err) {
+            console.error(err); // Log the full error
+            if (!err?.response) {
+                setErrMsg('No Response from Server');
+            } else if (err.response?.status === 400) {
+                setErrMsg('Missing Username or Password');
+            } else if (err.response?.status === 401) {
                 setErrMsg('Unauthorized');
-            } else{
-                setErrMsg('Login failed');
+            } else {
+                setErrMsg('Login Failed');
             }
             errRef.current.focus();
         }
+        
     }
   return (
     <>
