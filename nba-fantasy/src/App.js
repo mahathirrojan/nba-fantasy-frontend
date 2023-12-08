@@ -7,6 +7,7 @@ import Register from './Components/Login-SignUp/Register';
 import Player from './Components/Sports/Player';
 import Team from './Components/Sports/Team';
 import Home from './Components/Login-SignUp/Home';
+import PlayerDetails from './Components/Sports/PlayerDetails';
 
 function App() {
   const auth = UseAuth();
@@ -51,7 +52,9 @@ function App() {
           />
           <Route path="/register" element={<Register />} />
           <Route path="/home" element={<Home />} />
-          <Route path="/player" element={<Player />} />
+          <Route path="/player" element={<Player />} >
+          <Route path="/player/:id" element={<PlayerDetails />} />
+          </Route>
           <Route path="/team" element={<Team />} />
         </Routes>
       </div>
