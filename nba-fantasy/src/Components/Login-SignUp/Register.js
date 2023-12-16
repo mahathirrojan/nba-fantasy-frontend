@@ -32,6 +32,8 @@ const Register = () => {
 
     const [errMsg, setErrMsg] = useState('');
     const [success, setSuccess] = useState(false);
+    const [userId, setUserId] = useState(null);
+
 
     useEffect(() => {
         userRef.current.focus();
@@ -67,14 +69,29 @@ const Register = () => {
             return;
             // prevents accidental enabling of the button
         }
-        try{
-            const response = await axios.post("http://localhost:5001/user/", JSON.stringify({user, pwd}), {headers: { 'Content-Type' : 'application/json'}, withCredentials: true}
-            );
-            console.log(response.data);
-            console.log(response.accessToken);
-            console.log(JSON.stringify)
+        try {
+            // POST request to register user
+            const response = await axios.post("http://localhost:5001/user/", JSON.stringify({ user, pwd }), {
+                headers: { 'Content-Type': 'application/json' },
+                withCredentials: true
+            });
+        
+            // GET request to fetch user details
+            const responseGet = await axios.get("http://localhost:5001/user/", {
+                headers: { 'Content-Type': 'application/json' },
+                withCredentials: true
+            });
+            const lastUserId = responseGet.data[responseGet.data.length - 1].id;
+            setUserId(lastUserId); // Store user ID in state
+        
+            // Use lastUserId directly in the next request
+            const teamInfo = { Name: user }; 
+            await axios.post("http://localhost:5001/userteamlink/", JSON.stringify({ userId: lastUserId, teamInfo }), {
+                headers: { 'Content-Type': 'application/json' },
+                withCredentials: true
+            });
+        
             setSuccess(true);
-            // maybe we can clear input fields here
         } catch (err){
             if(!err?.response){
                 setErrMsg('No response from server')
@@ -85,6 +102,8 @@ const Register = () => {
             }
             errRef.current.focus();
         }
+        
+
     }
 
 
