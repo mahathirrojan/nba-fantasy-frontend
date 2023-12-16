@@ -1,11 +1,11 @@
 import './index.css';
 import { Routes, Route, Link, Navigate } from 'react-router-dom';
 import { AuthProvider, UseAuth } from './Components/context/AuthProvider';
-
+import {Team} from './Components/Sports/Team';
+import { TeamWrapper } from './Components/Sports/Team';
 import Login from './Components/Login-SignUp/Login';
 import Register from './Components/Login-SignUp/Register';
 import Player from './Components/Sports/Player';
-import Team from './Components/Sports/Team';
 import Home from './Components/Login-SignUp/Home';
 import PlayerDetails from './Components/Sports/PlayerDetails';
 
@@ -13,6 +13,7 @@ function App() {
   const auth = UseAuth();
 
   return (
+    <TeamWrapper>
     <AuthProvider>
       <div>
         <nav>
@@ -59,6 +60,7 @@ function App() {
         </Routes>
       </div>
     </AuthProvider>
+    </TeamWrapper>
   );
 }
 
