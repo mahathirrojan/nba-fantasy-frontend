@@ -13,8 +13,10 @@ function App() {
   const auth = UseAuth();
 
   return (
-    <TeamWrapper>
+    
     <AuthProvider>
+      
+
       <div>
         <nav>
           <ul>
@@ -36,7 +38,7 @@ function App() {
                   <Link to="/player">Player</Link>
                 </li>
                 <li>
-                  <Link to="/team">Team</Link>
+                    <Link to="/team">Team</Link>
                 </li>
                 <li>
                   <button onClick={() => auth.signout()}>Logout</button>
@@ -56,11 +58,12 @@ function App() {
           <Route path="/player" element={<Player />} >
           <Route path="/player/:id" element={<PlayerDetails />} />
           </Route>
-          <Route path="/team" element={<Team />} />
+          <Route path="/team" element={<TeamWrapper />} />
         </Routes>
       </div>
+      
     </AuthProvider>
-    </TeamWrapper>
+    
   );
 }
 
