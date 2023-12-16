@@ -12,12 +12,15 @@ export const Team = ({addTeam}) => {
   }
 
 return (
-    <form className="Team" onSubmit={handleSubmit}>
+  <>
+  <form className="Team" onSubmit={handleSubmit}>
       <input type="text" className='todo-input' value={value}
       placeholder="What Player Do You Want To Add?"
       onChange={(e) => setValue(e.target.value)}/>
       <button type ='submit' className = 'todo-btn'>Add Player</button> 
-    </form>
+      </form>
+  </>
+
   );
 };
 
