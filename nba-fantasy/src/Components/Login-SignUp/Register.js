@@ -5,6 +5,10 @@ import './Register.css'
 import axios from '../api/axios'
 import { Routes, Route, Link } from 'react-router-dom';
 import Login from './Login';
+import { useDispatch, useSelector } from 'react-redux';
+import {setUser} from "../../"
+
+
 
 
 // User Regex: Allows alphanumeric characters (lowercase/uppercase) and underscores, with a length between 3 and 20 characters.
@@ -14,7 +18,12 @@ const userRegex = /^[a-zA-z][a-zA-Z0-9_]{3,23}$/;
 const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,24}$/;
 
 const register_url = '/register';
+
 const Register = () => {
+    const dispatch = useDispatch();
+    
+
+
     const userRef = useRef(); 
     const errRef = useRef()
     
