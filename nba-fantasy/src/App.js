@@ -20,27 +20,44 @@ function App() {
     return (
       <nav>
         <ul>
-          <li>
-            <Link to="/register">Register</Link>
-          </li>
-          <li>
+        {!auth.user && (
+            <li>
             <Link to="/login">Login</Link>
           </li>
+          )}
+        {!auth.user && (
+            <li>
+            <Link to="/register">Register</Link>
+          </li>
+          )}
+          
+          
+          
+          {auth.user && (
+            <li>
+            <Link to="/home">Home</Link>
+          </li>
+          )}
+          {auth.user && (
+            <li>
+            <Link to="/team">Team</Link>
+        </li>
+          )}
+          {auth.user && (
+            <li>
+            <Link to="/player">Player</Link>
+          </li>
+          )}
+          
           {auth.user && (
             <li>
               {/* Display Logout component when user is authenticated */}
               <Logout />
             </li>
           )}
-                <li>
-                  <Link to="/home">Home</Link>
-                </li>
-                <li>
-                  <Link to="/player">Player</Link>
-                </li>
-                <li>
-                    <Link to="/team">Team</Link>
-                </li>
+                
+                
+                
         </ul>
       </nav>
     );
