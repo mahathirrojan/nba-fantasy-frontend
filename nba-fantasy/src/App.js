@@ -1,4 +1,4 @@
-import './index.css';
+import './NavBar.css';
 import { Routes, Route, Link, Navigate } from 'react-router-dom';
 import { AuthProvider, UseAuth } from './Components/context/AuthProvider';
 import {Team} from './Components/Sports/Team';
@@ -8,29 +8,30 @@ import Register from './Components/Login-SignUp/Register';
 import Player from './Components/Sports/Player';
 import Home from './Components/Login-SignUp/Home';
 import PlayerDetails from './Components/Sports/PlayerDetails';
+import Logout from './Components/Login-SignUp/LogOut';
+
 
 function App() {
   const auth = UseAuth();
 
-  return (
-    
-    <AuthProvider>
-      
-
-      <div>
-        <nav>
-          <ul>
-            {!auth.user ? (
-              <>
-                <li>
-                  <Link to="/login">Login</Link>
-                </li>
-                <li>
-                  <Link to="/register">Register</Link>
-                </li>
-              </>
-            ) : (
-              <>
+  const NavBar = () => {
+    const auth = UseAuth();
+  
+    return (
+      <nav>
+        <ul>
+          <li>
+            <Link to="/register">Register</Link>
+          </li>
+          <li>
+            <Link to="/login">Login</Link>
+          </li>
+          {auth.user && (
+            <li>
+              {/* Display Logout component when user is authenticated */}
+              <Logout />
+            </li>
+          )}
                 <li>
                   <Link to="/home">Home</Link>
                 </li>
@@ -40,13 +41,19 @@ function App() {
                 <li>
                     <Link to="/team">Team</Link>
                 </li>
-                <li>
-                  <button onClick={() => auth.signout()}>Logout</button>
-                </li>
-              </>
-            )}
-          </ul>
-        </nav>
+        </ul>
+      </nav>
+    );
+  };
+  
+
+  return (
+    
+    <AuthProvider>
+      
+
+      <div>
+        <NavBar />
 
         <Routes>
           <Route
