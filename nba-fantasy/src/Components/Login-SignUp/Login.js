@@ -70,7 +70,7 @@ const Login = () => {
                 <br />
                 <p>
                     {/* This is where the router to Team should be  */}
-                    <Link to="/team">Go To Team</Link>
+                    <Link to="/home">Go To Home</Link>
                 </p>
             </section>
         ) : (
