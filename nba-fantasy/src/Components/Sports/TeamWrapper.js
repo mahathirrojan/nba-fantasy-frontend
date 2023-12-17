@@ -34,6 +34,10 @@ export const TeamWrapper = () => {
       dispatch(setTeam(newTeamsArray)); // dispatch the new array    } else {
       // Optionally, set a message indicating the player does not exist
     }
+    else{
+      dispatch(setMessage(`Player ${player} not found or has no data available.`));
+
+    }
   };
   
   
