@@ -1,0 +1,42 @@
+/* NavBar.css */
+
+nav {
+    background-color: rgba(183, 104, 8, 0.926);
+    padding: 10px;
+  }
+  
+  ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  li {
+    display: inline;
+    margin-right: 10px;
+  }
+  
+  a {
+    text-decoration: none;
+    color: black;
+    
+    font-weight: bold;
+  }
+  
+  a:hover{
+    color: blueviolet;
+  }
+  button {
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: #45a049;
+  }
+  
