@@ -7,108 +7,112 @@ import AuthContext from '../context/AuthProvider';
 import { Link } from "react-router-dom"
 import Register from './Register';
 import { UseAuth } from '../context/AuthProvider';
+import { useDispatch, useSelector } from 'react-redux';
+import { setUser, setPwd, setErrMsg, setSuccess  } from '../../actions'; 
 
 
 
 const Login = () => {
+    const dispatch = useDispatch();
     const { signin } = UseAuth();
+
+    // Use useSelector to get the Redux state
+    const user = useSelector(state => state.user);
+    const pwd = useSelector(state => state.pwd);
+    const errMsg = useSelector(state => state.errMsg);
+    const success = useSelector(state => state.success);
+
+
     const userRef = useRef();
-    const errRef = useRef(); 
-
-    const [user, setUser] = useState('');
-    const [pwd, setPwd] = useState('');
-    const [errMsg, setErrMsg] = useState('');
-    const [success, setSuccess] = useState(false);
+    const errRef = useRef();
 
     useEffect(() => {
-        userRef.current.focus();
-    }, [])
-
+        return () => {
+            // Clear user and pwd state when component unmounts
+            dispatch(setUser(''));
+            dispatch(setPwd(''));
+        };
+    }, [dispatch]);
+    
     useEffect(() => {
-        setErrMsg('');
-    }, [user,pwd])
+        console.log("userRef.current:", userRef.current);
+        if (userRef.current) {
+            userRef.current.focus();
+        }
+    }, []);
 
-    const handleSubmit = async(e) => {
-        e.preventDefault(); 
-
-        try{
-            const response = await axios.post("http://localhost:5001/auth/", JSON.stringify({user, pwd}),
-            {
-                headers: {'Content-Type': 'application/json'},
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await axios.post("http://localhost:5001/auth/", JSON.stringify({ user, pwd }), {
+                headers: { 'Content-Type': 'application/json' },
                 withCredentials: true
-            }
-        );
-        console.log(JSON.stringify(response?.data));
-        // console.log(JSON.stringify(response));
-        const accessToken = response?.data.accessToken;
-        const roles = response?.data?.roles; 
-        signin({ user, pwd, accessToken });
-        setUser('');
-        setPwd('');
-        setSuccess(true);
+            });
+
+            const accessToken = response?.data.accessToken;
+            signin({ user, pwd, accessToken }); // You might need to update this part depending on your AuthContext
+            dispatch(setUser(''));
+            dispatch(setPwd(''));
+            dispatch(setSuccess(true)); // Assuming you have a setSuccess action
 
         } catch (err) {
             console.error(err); // Log the full error
             if (!err?.response) {
-                setErrMsg('No Response from Server');
+                dispatch(setErrMsg('No Response from Server')); // Assuming you have a setErrorMessage action
             } else if (err.response?.status === 400) {
-                setErrMsg('Missing Username or Password');
+                dispatch(setErrMsg('Missing Username or Password'));
             } else if (err.response?.status === 401) {
-                setErrMsg('Unauthorized');
+                dispatch(setErrMsg('Unauthorized'));
             } else {
-                setErrMsg('Login Failed');
+                dispatch(setErrMsg('Login Failed'));
             }
             errRef.current.focus();
         }
-        
-    }
-  return (
-    <>
-        {success ? (
-            <section>
-                <h1>You are logged in!</h1>
-                <br />
-                <p>
-                    {/* This is where the router to Team should be  */}
-                    <Link to="/home">Go To Home</Link>
-                </p>
-            </section>
-        ) : (
-    <section>
-        <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
-        <h1>Login</h1>
-        <form onSubmit={handleSubmit}>
-            <label htmlFor="username">Username: </label>
-            <input 
-            type="text" 
-            id="username" 
-            ref={userRef}
-            autoComplete="off"
-            onChange={(e) => setUser(e.target.value)}
-            value={user}
-            required
-            /> 
-            <label htmlFor="password">Password: </label>
-            <input 
-            type="password" 
-            id="password" 
-            onChange={(e) => setPwd(e.target.value)}
-            value={pwd}
-            required
-            /> 
-            <button>Login</button>
-        </form>
-        <p>
-            New Here?<br />
-            {/* register router goes here  */}
-            <span>
-            <Link to="/register">Sign Up</Link>
-            </span>
-        </p>
-    </section>
-        )}
-        </>
-  )
-}
+    };
 
-export default Login
+    return (
+        <>
+            {success ? (
+                <section>
+                    <h1>You are logged in!</h1>
+                    <br />
+                    <Link to="/home">Go To Home</Link>
+                </section>
+            ) : (
+                <section>
+                    <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
+                    <h1>Login</h1>
+                    <form onSubmit={handleSubmit}>
+                        <label htmlFor="username">Username: </label>
+                        <input
+                            type="text"
+                            id="username"
+                            ref={userRef}
+                            autoComplete="off"
+                            onChange={(e) => dispatch(setUser(e.target.value))}
+                            value={user}
+                            required
+                        />
+                        <label htmlFor="password">Password: </label>
+                        <input
+                            type="password"
+                            id="password"
+                            onChange={(e) => dispatch(setPwd(e.target.value))}
+                            value={pwd}
+                            required
+                        />
+                        <button>Login</button>
+                    </form>
+                    <p>
+                        New Here?<br />
+                        <span>
+                            <Link to="/register">Sign Up</Link>
+                        </span>
+                    </p>
+                </section>
+            )}
+        </>
+    );
+};
+
+export default Login;

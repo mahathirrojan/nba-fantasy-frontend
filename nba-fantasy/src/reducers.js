@@ -2,25 +2,26 @@ const initialState = {
     query: '',
     playerDetails: null,
     filteredPlayers: [],
-
     value1: '',
     teams: [],
     message: '',
-
-
     // Auth-related states
     user: '',
+    localUser: null,
+    pwd: '',
+    errRef: '',
+    success: null,
+    userId: null,
     validName: false,
     userFocus: false,
-    pwd: '',
     validPwd: false,
     pwdFocus: false,
     matchPwd: '',
     validMatch: false,
     matchFocus: false,
-    errMsg: '',
-    success: false,
-    userId: null,
+    errMsgRegister: '',
+    successRegister: false
+    
   };
   
   function rootReducer(state = initialState, action) {
@@ -31,25 +32,29 @@ const initialState = {
         return { ...state, playerDetails: action.payload };
       case 'SET_FILTERED_PLAYERS':
         return { ...state, filteredPlayers: action.payload };
-
-        case 'SET_VALUE1':
-            return { ...state, value1: action.payload };
-    
-        case 'SET_TEAM':
+      case 'SET_VALUE1':
+        return { ...state, value1: action.payload };
+      case 'SET_TEAM':
             return { ...state, teams: action.payload };
-
-        case 'SET_MESSAGE':
-            return { ...state, message: action.payload };
-
+      case 'SET_MESSAGE':
+        return { ...state, message: action.payload };
       // Auth-related cases
       case 'SET_USER':
         return { ...state, user: action.payload };
+      case 'SET_LOCAL_USER':
+        return { ...state, localUser: action.payload };
+      case 'SET_PASSWORD':
+        return { ...state, pwd: action.payload };
+      case 'SET_MSG':
+        return { ...state, errMsg: action.payload };
+      case 'SET_SUCCESS':
+        return { ...state, success: action.payload };
+      case 'SET_USER_ID':
+        return { ...state, userId: action.payload };
       case 'SET_VALID_NAME':
         return { ...state, validName: action.payload };
       case 'SET_USER_FOCUS':
         return { ...state, userFocus: action.payload };
-      case 'SET_PASSWORD':
-        return { ...state, pwd: action.payload };
       case 'SET_VALID_PASSWORD':
         return { ...state, validPwd: action.payload };
       case 'SET_PASSWORD_FOCUS':
@@ -61,11 +66,10 @@ const initialState = {
       case 'SET_MATCH_FOCUS':
         return { ...state, matchFocus: action.payload };
       case 'SET_ERROR_MESSAGE':
-        return { ...state, errMsg: action.payload };
+        return { ...state, errMsgRegister: action.payload };
       case 'SET_REGISTRATION_SUCCESS':
-        return { ...state, success: action.payload };
-      case 'SET_USER_ID':
-        return { ...state, userId: action.payload };
+        return { ...state, successRegister: action.payload };
+
   
       default:
         return state;

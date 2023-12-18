@@ -16,11 +16,6 @@ export const TeamWrapper = () => {
   const message = useSelector(state => state.message);
 
 
-
-
-
-  
-
   const addTeam = async (player) => {
 
     dispatch(setMessage(''));

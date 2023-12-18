@@ -18,6 +18,7 @@ export const setFilteredPlayers = (array) => {
     };
   };
 
+// team actions
   export const setValue1 = (value) => ({
     type: 'SET_VALUE1',
     payload: value,
@@ -35,12 +36,37 @@ export const setFilteredPlayers = (array) => {
     payload: value,
   });
 
-  
-  // New auth-related actions
+//   New auth-related actions
   export const setUser = (user) => ({
     type: 'SET_USER',
     payload: user,
   });
+
+  export const setLocalUser = (userauth) => ({
+    type: 'SET_LOCAL_USER',
+    payload: userauth,
+  });
+
+  export const setPwd = (password) => ({
+    type: 'SET_PASSWORD',
+    payload: password,
+  });
+
+  export const setErrMsg = (msg) => ({
+    type: 'SET_MSG',
+    payload: msg,
+  });
+
+  export const setSuccess = (state) => ({
+    type: 'SET_SUCCESS',
+    payload: state,
+  });
+
+  export const setUserId = (id) => ({
+    type: 'SET_USER_ID',
+    payload: id,
+  });
+
   
   export const setValidName = (isValid) => ({
     type: 'SET_VALID_NAME',
@@ -52,10 +78,7 @@ export const setFilteredPlayers = (array) => {
     payload: isFocused,
   });
   
-  export const setPassword = (password) => ({
-    type: 'SET_PASSWORD',
-    payload: password,
-  });
+
   
   export const setValidPassword = (isValid) => ({
     type: 'SET_VALID_PASSWORD',
@@ -82,18 +105,15 @@ export const setFilteredPlayers = (array) => {
     payload: isFocused,
   });
   
-  export const setErrorMessage = (message) => ({
+  export const setErrMsgRegister = (message) => ({
     type: 'SET_ERROR_MESSAGE',
     payload: message,
   });
   
-  export const setRegistrationSuccess = (isSuccess) => ({
+  export const setSuccessRegsiter = (isSuccess) => ({
     type: 'SET_REGISTRATION_SUCCESS',
     payload: isSuccess,
   });
   
-  export const setUserId = (id) => ({
-    type: 'SET_USER_ID',
-    payload: id,
-  });
+  
   
