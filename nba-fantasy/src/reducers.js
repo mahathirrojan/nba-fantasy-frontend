@@ -20,7 +20,8 @@ const initialState = {
     validMatch: false,
     matchFocus: false,
     errMsgRegister: '',
-    successRegister: false
+    successRegister: false,
+    userTeamID: null
     
   };
   
@@ -69,7 +70,10 @@ const initialState = {
         return { ...state, errMsgRegister: action.payload };
       case 'SET_REGISTRATION_SUCCESS':
         return { ...state, successRegister: action.payload };
+      case 'SET_USER_TEAM_ID':
+        return { ...state, userTeamID: action.payload };
 
+        
   
       default:
         return state;

@@ -91,6 +91,7 @@ const Register = () => {
                 withCredentials: true
             });
             const lastUserId = responseGet.data[responseGet.data.length - 1].id;
+            console.log(lastUserId)
             dispatch(setUserId(lastUserId)); // Store user ID in state
         
             // Use lastUserId directly in the next request

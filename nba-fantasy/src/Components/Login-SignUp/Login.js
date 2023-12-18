@@ -8,7 +8,7 @@ import { Link } from "react-router-dom"
 import Register from './Register';
 import { UseAuth } from '../context/AuthProvider';
 import { useDispatch, useSelector } from 'react-redux';
-import { setUser, setPwd, setErrMsg, setSuccess  } from '../../actions'; 
+import { setUser, setPwd, setErrMsg, setSuccess, setUserTeamID  } from '../../actions'; 
 
 
 
@@ -21,6 +21,8 @@ const Login = () => {
     const pwd = useSelector(state => state.pwd);
     const errMsg = useSelector(state => state.errMsg);
     const success = useSelector(state => state.success);
+    const userTeamID = useSelector(state => state.userTeamID);
+
 
 
     const userRef = useRef();
@@ -35,7 +37,7 @@ const Login = () => {
     }, [dispatch]);
     
     useEffect(() => {
-        console.log("userRef.current:", userRef.current);
+        // console.log("userRef.current:", userRef.current);
         if (userRef.current) {
             userRef.current.focus();
         }
@@ -48,6 +50,15 @@ const Login = () => {
                 headers: { 'Content-Type': 'application/json' },
                 withCredentials: true
             });
+
+            const userID = await axios.get(`http://localhost:5001/getUserId/${user}`, {
+                headers: { 'Content-Type': 'application/json' },
+                withCredentials: true
+            });
+            
+            const val = userID.data.id
+            dispatch(setUserTeamID(val))
+            
 
             const accessToken = response?.data.accessToken;
             signin({ user, pwd, accessToken }); // You might need to update this part depending on your AuthContext

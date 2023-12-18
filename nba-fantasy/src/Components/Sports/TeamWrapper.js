@@ -14,6 +14,7 @@ export const TeamWrapper = () => {
   const dispatch = useDispatch();
   const teams = useSelector(state => state.teams);
   const message = useSelector(state => state.message);
+  const userTeamID = useSelector(state => state.userTeamID);
 
 
   const addTeam = async (player) => {
@@ -24,6 +25,11 @@ export const TeamWrapper = () => {
     // Check if player exists (assuming 0 points indicates non-existence)
     if (fantasyPoints !== 0) {
       const newPlayer = { id: uuidv4(), task: player, points: fantasyPoints, dropped: false, isEditing: false };
+
+      const addingPlayer = await axios.post("http://localhost:5001/createPlayerAndAddToTeam/", JSON.stringify({ teamId: userTeamID , playerData: { person: player, points: fantasyPoints } }), {
+                headers: { 'Content-Type': 'application/json' },
+                withCredentials: true
+            });
 
       const newTeamsArray = [...teams, newPlayer]; // create a new array
       dispatch(setTeam(newTeamsArray)); // dispatch the new array    } else {
@@ -37,13 +43,18 @@ export const TeamWrapper = () => {
   
   
 
-  const deletePlayer = (id) => {
-  
-    const newTeamsArray = teams.filter(player => player.id !== id);
-  dispatch(setTeam(newTeamsArray));
-  }
+  const deletePlayer = async (id) => {
+    const deletePlayerResponse = await axios.delete(`http://localhost:5001/player/${id}`, {
+        headers: { 'Content-Type': 'application/json' },
+        withCredentials: true
+    });
 
-  const editTeam = (id) =>{
+    const newTeamsArray = teams.filter(player => player.id !== id);
+    dispatch(setTeam(newTeamsArray));
+};
+
+
+  const editTeam = async (id) =>{
     const newTeamsArray = teams.map(player => player.id === id ? {...player, isEditing: !player.isEditing} : player);
     dispatch(setTeam(newTeamsArray));  }
 
