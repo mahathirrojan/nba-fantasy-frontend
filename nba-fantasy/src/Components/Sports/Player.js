@@ -3,6 +3,12 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { setFilteredPlayers, setPlayerDetails, setQuery } from '../../actions'; // Make sure to import necessary actions
+import OpenAI from 'openai';
+
+const openai = new OpenAI({
+  apiKey: "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",
+  dangerouslyAllowBrowser: true } // This is also the default, can be omitted
+);
 
 const Player = () => {
   const navigate = useNavigate();
@@ -11,6 +17,9 @@ const Player = () => {
   const playerDetails = useSelector((state) => state.playerDetails);
   const query = useSelector((state) => state.query);
   const { id } = useParams();
+ 
+const [chatOutput, setChatOutput] = useState('');
+
 
   useEffect(() => {
     if (id) {
@@ -33,6 +42,12 @@ const Player = () => {
     try {
       const response = await fetch(`https://www.balldontlie.io/api/v1/players?search=${query}`);
       const data = await response.json();
+      const chatCompletion = await openai.chat.completions.create({
+        model: "gpt-3.5-turbo",
+        max_tokens: 1000,
+        messages: [{ "role": "user", "content":  `give me fun facts and awards gained by ${query}. in the repsonse only give me the infromation` }],
+    });
+    setChatOutput(chatCompletion.choices[0].message.content);
 
       dispatch(setFilteredPlayers(data.data));
 
@@ -47,6 +62,9 @@ const Player = () => {
   const handleChange = (e) => {
     dispatch(setQuery(e.target.value));
   };
+
+
+
 
   return (
     <div>
@@ -73,6 +91,7 @@ const Player = () => {
             <p>Position: {playerDetails.position}</p>
             <p>Team: {playerDetails.team.full_name}</p>
           </div>
+          
         ) : (
           <ul className="player-list">
             {filteredPlayers.map((player) => (
@@ -85,6 +104,10 @@ const Player = () => {
           </ul>
         )}
       </div>
+      <div className="chat-box">
+    {chatOutput && <div className="chat-response">{chatOutput}</div>}
+</div>
+
     </div>
   );
 };
