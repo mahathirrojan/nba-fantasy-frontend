@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {TeamWrapper} from './TeamWrapper'
-
+import './Team.css';
 export {TeamWrapper};
 export const Team = ({addTeam}) => {
   const [value, setValue] = useState("");

@@ -1,4 +1,4 @@
-import './NavBar.css';
+import './styles.css'; 
 import { Routes, Route, Link, Navigate } from 'react-router-dom';
 import { AuthProvider, UseAuth } from './Components/context/AuthProvider';
 import {Team} from './Components/Sports/Team';
@@ -9,59 +9,13 @@ import Player from './Components/Sports/Player';
 import Home from './Components/Login-SignUp/Home';
 import PlayerDetails from './Components/Sports/PlayerDetails';
 import Logout from './Components/Login-SignUp/LogOut';
+import NavBar from './Components/Website/NavBar';
 
 
 function App() {
   const auth = UseAuth();
 
-  const NavBar = () => {
-    const auth = UseAuth();
-  
-    return (
-      <nav>
-        <ul>
-        {!auth.user && (
-            <li>
-            <Link to="/login">Login</Link>
-          </li>
-          )}
-        {!auth.user && (
-            <li>
-            <Link to="/register">Register</Link>
-          </li>
-          )}
-          
-          
-          
-          {auth.user && (
-            <li>
-            <Link to="/home">Home</Link>
-          </li>
-          )}
-          {auth.user && (
-            <li>
-            <Link to="/team">Team</Link>
-        </li>
-          )}
-          {auth.user && (
-            <li>
-            <Link to="/player">Player</Link>
-          </li>
-          )}
-          
-          {auth.user && (
-            <li>
-              {/* Display Logout component when user is authenticated */}
-              <Logout />
-            </li>
-          )}
-                
-                
-                
-        </ul>
-      </nav>
-    );
-  };
+
   
 
   return (

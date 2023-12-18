@@ -95,28 +95,26 @@ export const TeamWrapper = () => {
 
 
   return (
-    <>
-      <h1>Your Team</h1>
-      {message && <div className="alert">{message}</div>} {/* Display the message */}
-      <div>Total Points: {getTotalTeamPoints()}</div> {/* Display total points */}
+    <div className="TeamWrapper">
+      <div className="Team">
+        <h1>Your Team</h1>
+        {message && <div className="alert">{message}</div>}
+        <Team addTeam={addTeam} />
+        {teams.map((player, index) =>
+          player.isEditing ? (
+            <EditTeam editTeam={editPlayer} task={player} key={index} />
+          ) : (
+            <TeamDisplay task={player} key={index} deletePlayer={deletePlayer} editTeam={editTeam} />
+          )
+        )}
+      </div>
 
-      <Team addTeam={addTeam} />
-
-      {teams.map((player, index) => (
-        player.isEditing? (
-            <EditTeam editTeam={editPlayer} task = {player}/>
-        ) :(
-            <TeamDisplay task={player} key={index}
-            deletePlayer ={deletePlayer} editTeam={editTeam}/>
-        )
-        
-      ))}
-
-
-      
-    
-    </>
-    );
+      <div className="Scoreboard">
+        <p>Total Points:</p>
+        <p>{getTotalTeamPoints()}</p>
+      </div>
+    </div>
+  );
 };
 
 export default TeamWrapper;

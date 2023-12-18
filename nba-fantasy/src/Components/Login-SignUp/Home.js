@@ -9,9 +9,9 @@ const Home = ({ isAuthenticated }) => {
     <div className="container">
       <div className="header">
         <div className="text">
-          {isAuthenticated
-            ? 'Welcome back to NBA Fantasy Team Creator'
-            : 'Welcome to NBA Fantasy Team Creator'}
+          {auth.user && (
+            'Welcome back to NBA Fantasy Team Creator')}
+             {!auth.user && ('Welcome to NBA Fantasy Team Creator')}
         </div>
         {isAuthenticated && (
           <div className="fantasy-buttons">

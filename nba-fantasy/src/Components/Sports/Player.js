@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import SearchBar from './SearchBar';
 import './Player.css';
+import PlayerDetails from './PlayerDetails';
 
 const Player = () => {
   const navigate = useNavigate();
@@ -15,7 +16,7 @@ const Player = () => {
       setFilteredPlayers(data.data);
 
       if (data.data.length === 1) {
-        // Use the `navigate` function from the `useNavigate` hook to navigate
+        
         navigate(`/player/${data.data[0].id}`);
       }
     } catch (error) {
