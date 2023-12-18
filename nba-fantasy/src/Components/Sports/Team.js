@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import {TeamWrapper} from './TeamWrapper'
+import './Team.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { setValue1 } from '../../actions'; 
 

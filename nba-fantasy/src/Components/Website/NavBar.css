@@ -1,0 +1,49 @@
+/* NavBar.css */
+
+nav {
+    background-color: #1b1b1b; /* Dark background color */
+    padding: 15px 40px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  ul {
+    list-style: none;
+    display: flex;
+    justify-content: space-between; /* Distribute space evenly between items */
+    align-items: center;
+    margin: 0;
+    padding: 0;
+  }
+  
+  li {
+    margin: 0 10px; /* Adjust spacing between links */
+  }
+  
+  li a {
+    text-decoration: none;
+    color: #fff; /* White text color */
+    font-size: 16px;
+    transition: color 0.3s ease;
+  }
+  
+  li a:hover {
+    color: orangered; /* NBA orange on hover */
+  }
+  
+  .logout-button {
+    background-color: #ff4500; /* NBA orange */
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .logout-button:hover {
+    background-color: blue; 
+  }
+  
+  button {
+    background-color: #ff4500;
+  }
