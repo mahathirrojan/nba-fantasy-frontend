@@ -1,14 +1,21 @@
 import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { setQuery } from '../../actions'; 
+
 
 const SearchBar = ({ onSearch }) => {
-  const [query, setQuery] = useState('');
+
+  const dispatch = useDispatch();
+  const query = useSelector(state => state.query); 
+
+  
 
   const handleSearch = () => {
     onSearch(query);
   };
 
   const handleChange = (e) => {
-    setQuery(e.target.value);
+    dispatch(setQuery(e.target.value));
   };
 
   return (

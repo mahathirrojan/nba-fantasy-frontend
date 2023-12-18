@@ -2,17 +2,23 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import SearchBar from './SearchBar';
 import './Player.css';
+import { useDispatch, useSelector } from 'react-redux';
+import { setFilteredPlayers } from '../../actions'; 
+
 
 const Player = () => {
   const navigate = useNavigate();
-  const [filteredPlayers, setFilteredPlayers] = useState([]);
+  const dispatch = useDispatch();
+  const filteredPlayers = useSelector(state => state.filteredPlayers); 
+
+  
 
   const handleSearch = async (query) => {
     try {
       const response = await fetch(`https://www.balldontlie.io/api/v1/players?search=${query}`);
       const data = await response.json();
 
-      setFilteredPlayers(data.data);
+      dispatch(setFilteredPlayers(data.data));
 
       if (data.data.length === 1) {
         // Use the `navigate` function from the `useNavigate` hook to navigate

@@ -5,6 +5,10 @@ import './Register.css'
 import axios from '../api/axios'
 import { Routes, Route, Link } from 'react-router-dom';
 import Login from './Login';
+import { useDispatch, useSelector } from 'react-redux';
+import {setUser, setUserId, setValidName, setPwd, setValidPassword, setPasswordFocus, setMatchPassword, setValidMatch, setMatchFocus, setUserFocus, setSuccessRegsiter, setErrMsgRegister  } from "../../actions"
+
+
 
 
 // User Regex: Allows alphanumeric characters (lowercase/uppercase) and underscores, with a length between 3 and 20 characters.
@@ -14,25 +18,28 @@ const userRegex = /^[a-zA-z][a-zA-Z0-9_]{3,23}$/;
 const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,24}$/;
 
 const register_url = '/register';
+
 const Register = () => {
+    const dispatch = useDispatch();
+    
+
+
     const userRef = useRef(); 
     const errRef = useRef()
     
-    const [user, setUser] = useState('');
-    const [validName, setValidName] = useState(false); 
-    const [userFocus, setUserFocus] = useState(false); // whether we have focus on that input field 
-
-    const [pwd, setPwd] = useState('');
-    const [validPwd, setValidPwd] = useState(false); 
-    const [pwdFocus, setPwdFocus] = useState(false);
-
-    const [matchPwd, setMatchPwd] = useState('');
-    const [validMatch, setValidMatch] = useState(false);
-    const [matchFocus, setMatchFocus] = useState(false);
-
-    const [errMsg, setErrMsg] = useState('');
-    const [success, setSuccess] = useState(false);
-    const [userId, setUserId] = useState(null);
+    const user = useSelector(state => state.user);
+    const userId = useSelector(state => state.userId);
+    const validName = useSelector(state => state.validName);
+    const userFocus = useSelector(state => state.userFocus);
+    const pwd = useSelector(state => state.pwd);
+    const validPwd = useSelector(state => state.validPwd);
+    const pwdFocus = useSelector(state => state.pwdFocus);
+    const matchPwd = useSelector(state => state.matchPwd);
+    const validMatch = useSelector(state => state.validMatch);
+    const matchFocus = useSelector(state => state.matchFocus);
+    const errMsgRegister = useSelector(state => state.errMsgRegister);
+    const successRegister = useSelector(state => state.successRegister);
+    
 
 
     useEffect(() => {
@@ -43,21 +50,21 @@ const Register = () => {
         const result = userRegex.test(user);
         console.log(result);
         console.log(user);
-        setValidName(result);
-    }, [user])
+        dispatch(setValidName(result));
+    }, [user,dispatch])
 
     useEffect(() => {
         const result = passwordRegex.test(pwd);
         console.log(result);
         console.log(pwd);
-        setValidPwd(result);
+        dispatch(setValidPassword(result));
         const match = pwd === matchPwd; 
-        setValidMatch(match);
-    }, [pwd, matchPwd])
+        dispatch(setValidMatch(match));
+    }, [pwd, matchPwd, dispatch])
 
     useEffect(() => {
-        setErrMsg('');
-    }, [user, pwd, matchPwd])
+        dispatch(setErrMsgRegister(''));
+    }, [user, pwd, matchPwd,dispatch])
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -65,12 +72,14 @@ const Register = () => {
         const v1 = userRegex.test(user);
         const v2 = passwordRegex.test(pwd);
         if (!v1 || !v2){
-            setErrMsg("Invalid Entry");
+            dispatch(setErrMsgRegister("Invalid Entry"));
             return;
             // prevents accidental enabling of the button
         }
         try {
             // POST request to register user
+            console.log("Sending registration data:", { user, pwd });
+
             const response = await axios.post("http://localhost:5001/user/", JSON.stringify({ user, pwd }), {
                 headers: { 'Content-Type': 'application/json' },
                 withCredentials: true
@@ -82,7 +91,7 @@ const Register = () => {
                 withCredentials: true
             });
             const lastUserId = responseGet.data[responseGet.data.length - 1].id;
-            setUserId(lastUserId); // Store user ID in state
+            dispatch(setUserId(lastUserId)); // Store user ID in state
         
             // Use lastUserId directly in the next request
             const teamInfo = { Name: user }; 
@@ -91,14 +100,14 @@ const Register = () => {
                 withCredentials: true
             });
         
-            setSuccess(true);
+            dispatch(setSuccessRegsiter(true));
         } catch (err){
             if(!err?.response){
-                setErrMsg('No response from server')
+                dispatch(setErrMsgRegister('No response from server'))
             } else if(err.response?.status === 409){
-                setErrMsg('Username already exists');
+                dispatch(setErrMsgRegister('Username already exists'));
             } else{
-                setErrMsg('Failed Registration');
+                dispatch(setErrMsgRegister('Failed Registration'));
             }
             errRef.current.focus();
         }
@@ -109,7 +118,7 @@ const Register = () => {
 
   return (
     <>
-    {success ? (
+    {successRegister ? (
         <section>
             <h1>Success</h1><p>
             <Link to="/login">Sign In</Link>
@@ -117,7 +126,7 @@ const Register = () => {
         </section>
     ) : (
     <section>
-        <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
+        <p ref={errRef} className={errMsgRegister ? "errmsg" : "offscreen"} aria-live="assertive">{errMsgRegister}</p>
         <h1>Register</h1>
         <form onSubmit={handleSubmit}>
             <label htmlFor="username">Username: 
@@ -133,12 +142,12 @@ const Register = () => {
             id="username" 
             ref={userRef}
             autoComplete="off"
-            onChange={(e) => setUser(e.target.value)}
+            onChange={(e) => dispatch(setUser(e.target.value))}
             required
             aria-invalid={validName ? "false" : "true"}
             aria-describedby="uidnote"
-            onFocus={() => setUserFocus(true)}
-            onBlur={() => setUserFocus(false)}
+            onFocus={() => dispatch(setUserFocus(true))}
+            onBlur={() => dispatch(setUserFocus(false))}
             />
             <p id="uidnote" className={userFocus && user && !validName ? "instructions" : "offscreen"}>
             <FontAwesomeIcon icon={faInfoCircle} />
@@ -159,12 +168,12 @@ const Register = () => {
             <input
                 type="password"
                 id="password"
-                onChange={(e) => setPwd(e.target.value)}
+                onChange={(e) => dispatch(setPwd(e.target.value))}
                 required
                 aria-invalid={validPwd ? "false" : "true"}
                 aria-describedby="pwdnote"
-                onFocus={() => setPwdFocus(true)}
-                onBlur={() => setPwdFocus(false)}
+                onFocus={() => dispatch(setPasswordFocus(true))}
+                onBlur={() => dispatch(setPasswordFocus(false))}
                 />
                 <p id="pwdnote" className={pwdFocus && !validPwd ? "instructions" : "offscreen"}>
                     <FontAwesomeIcon icon={faInfoCircle} />
@@ -185,12 +194,12 @@ const Register = () => {
                 <input
                     type="password"
                     id="confirm_pwd"
-                    onChange={(e) => setMatchPwd(e.target.value)}
+                    onChange={(e) => dispatch(setMatchPassword(e.target.value))}
                     required
                     aria-invalid={validMatch ? "false" : "true"}
                     aria-describedby="confirmpwdnote"
-                    onFocus={() => setMatchFocus(true)}
-                    onBlur={() => setMatchFocus(false)}
+                    onFocus={() => dispatch(setMatchFocus(true))}
+                    onBlur={() => dispatch(setMatchFocus(false))}
                 />
                 <p id="confirmpwdnote" className={matchFocus && !validMatch ? "instructions" : "offscreen"}>
                     <FontAwesomeIcon icon={faInfoCircle} />

@@ -1,9 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { setPlayerDetails } from '../../actions'; 
+
 
 const PlayerDetails = () => {
   const { id } = useParams();
-  const [playerDetails, setPlayerDetails] = useState(null);
+  const dispatch = useDispatch();
+  const playerDetails = useSelector(state => state.playerDetails); 
+
+
+  
+
 
   useEffect(() => {
     const fetchPlayerDetails = async () => {
@@ -11,14 +19,14 @@ const PlayerDetails = () => {
         const response = await fetch(`https://www.balldontlie.io/api/v1/players/${id}`);
         const data = await response.json();
 
-        setPlayerDetails(data);
+        dispatch(setPlayerDetails(data));
       } catch (error) {
         console.error('Error fetching player details:', error);
       }
     };
 
     fetchPlayerDetails();
-  }, [id]);
+  }, [id, dispatch]);
 
   if (!playerDetails) {
     return <div>Loading...</div>;
