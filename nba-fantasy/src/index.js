@@ -7,10 +7,14 @@ import App from "./App";
 import reportWebVitals from './reportWebVitals';
 import { AuthProvider } from "./Components/context/AuthProvider";
 
+import store from './store';
+
 const root = createRoot(document.getElementById('root')); 
 
 root.render(
   <React.StrictMode>
+      <Provider store={store}>
+
     <BrowserRouter>
       {/* <Provider store={store}> */}
       <AuthProvider>
@@ -18,6 +22,8 @@ root.render(
         </AuthProvider>
       {/* </Provider> */}
     </BrowserRouter>
+    </Provider>
+
   </React.StrictMode>
 );
 

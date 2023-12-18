@@ -4,29 +4,34 @@ import { v4 as uuidv4 } from 'uuid';
 import { TeamDisplay } from './TeamDisplay';
 import {EditTeam} from './EditTeam';
 import axios from '../api/axios'
+import { useDispatch, useSelector } from 'react-redux';
+import { setMessage, setTeam } from '../../actions'; 
 
 uuidv4();
 
 export const TeamWrapper = () => {
-  const [teams, setTeam] = useState([])
-  const [message, setMessage] = useState('');
 
+  const dispatch = useDispatch();
+  const teams = useSelector(state => state.teams);
+  const message = useSelector(state => state.message);
 
-
-  
 
   const addTeam = async (player) => {
 
-    setMessage('');
+    dispatch(setMessage(''));
     const fantasyPoints = await fetchPointsForPlayer(player);
   
     // Check if player exists (assuming 0 points indicates non-existence)
     if (fantasyPoints !== 0) {
       const newPlayer = { id: uuidv4(), task: player, points: fantasyPoints, dropped: false, isEditing: false };
-      setTeam(prevTeams => [...prevTeams, newPlayer]);
-    } else {
+
+      const newTeamsArray = [...teams, newPlayer]; // create a new array
+      dispatch(setTeam(newTeamsArray)); // dispatch the new array    } else {
       // Optionally, set a message indicating the player does not exist
-      setMessage(`Player ${player} not found or has no data available.`);
+    }
+    else{
+      dispatch(setMessage(`Player ${player} not found or has no data available.`));
+
     }
   };
   
@@ -34,17 +39,19 @@ export const TeamWrapper = () => {
 
   const deletePlayer = (id) => {
   
-    setTeam(teams.filter(player => player.id !== id))
+    const newTeamsArray = teams.filter(player => player.id !== id);
+  dispatch(setTeam(newTeamsArray));
   }
 
   const editTeam = (id) =>{
-    setTeam(teams.map(player=>player.id === id? {...player, isEditing:!player.isEditing} :player))
-  }
+    const newTeamsArray = teams.map(player => player.id === id ? {...player, isEditing: !player.isEditing} : player);
+    dispatch(setTeam(newTeamsArray));  }
 
   const editPlayer = (task,id) =>{
 
-    setTeam(teams.map(player=>player.id === id? {...player,task,isEditing: !player.isEditing} :player ))
-  }
+    const newTeamsArray = teams.map(player => player.id === id ? {...player, task, isEditing: !player.isEditing} : player);
+    dispatch(setTeam(newTeamsArray));
+    }
 
   const fetchPointsForPlayer = async (playerName) => {
     
@@ -79,7 +86,7 @@ export const TeamWrapper = () => {
       return value;
     }catch (error) {
       console.error('Error fetching points:', error);
-      setMessage(`No data found for player: Reenter Proper Name`);
+      dispatch(setMessage(`No data found for player: Reenter Proper Name`));
       return 0;
     }
     
