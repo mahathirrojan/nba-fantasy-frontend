@@ -23,6 +23,8 @@ const initialState = {
     successRegister: false,
     playerStats: null,
     mostRecentGame: null,
+    userTeamID: null
+
     
   };
   
@@ -74,6 +76,8 @@ const initialState = {
       // New case for player stats
       case 'SET_PLAYER_STATS':
         return { ...state, mostRecentGame: action.payload };
+        case 'SET_USER_TEAM_ID':
+        return { ...state, userTeamID: action.payload };
       
 
   

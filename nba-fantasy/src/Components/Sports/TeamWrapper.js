@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback} from 'react';
 import { Team } from './Team';
 import { v4 as uuidv4 } from 'uuid';
 import { TeamDisplay } from './TeamDisplay';
@@ -14,6 +14,35 @@ export const TeamWrapper = () => {
   const dispatch = useDispatch();
   const teams = useSelector(state => state.teams);
   const message = useSelector(state => state.message);
+  const userTeamID = useSelector(state => state.userTeamID);
+  console.log(userTeamID)
+
+  const fetchTeamData = useCallback(async () => {
+    try {
+      const response = await axios.get(`http://localhost:5001/team/${userTeamID}`);
+      if (response.data && response.data.players) {
+        const playerData = response.data.players.map(player => ({
+          id: player.id,
+          task: player.person, // 'task' is used for the player's name
+          points: player.points
+        }));
+        dispatch(setTeam(playerData));
+      } else {
+        dispatch(setMessage('No team data available'));
+      }
+    } catch (error) {
+      console.error('Error fetching team data:', error);
+      dispatch(setMessage('Error fetching team data'));
+    }
+  }, [dispatch, userTeamID]); // Add any dependencies of fetchTeamData here
+
+  useEffect(() => {
+    if (userTeamID) {
+      fetchTeamData();
+    }
+  }, [fetchTeamData, userTeamID]); // fetchTeamData is now memoized
+
+  
 
 
   const addTeam = async (player) => {
@@ -23,27 +52,43 @@ export const TeamWrapper = () => {
   
     // Check if player exists (assuming 0 points indicates non-existence)
     if (fantasyPoints !== 0) {
-      const newPlayer = { id: uuidv4(), task: player, points: fantasyPoints, dropped: false, isEditing: false };
 
-      const newTeamsArray = [...teams, newPlayer]; // create a new array
-      dispatch(setTeam(newTeamsArray)); // dispatch the new array    } else {
-      // Optionally, set a message indicating the player does not exist
-    }
-    else{
-      dispatch(setMessage(`Player ${player} not found or has no data available.`));
+      try {
+        await axios.post("http://localhost:5001/createPlayerAndAddToTeam/", {
+          teamId: userTeamID, 
+          playerData: { person: player, points: fantasyPoints }
+        }, {
+          headers: { 'Content-Type': 'application/json' },
+          withCredentials: true
+        });
+    
+        // Fetch updated team data
+        fetchTeamData();
+
+      } catch (error) {
+        console.error("Error in POST request:", error);
+        dispatch(setMessage('Error adding player'));
+      }
+
+      
 
     }
   };
   
   
 
-  const deletePlayer = (id) => {
-  
-    const newTeamsArray = teams.filter(player => player.id !== id);
-  dispatch(setTeam(newTeamsArray));
-  }
+  const deletePlayer = async (id) => {
+    const deletePlayerResponse = await axios.delete(`http://localhost:5001/player/${id}`, {
+        headers: { 'Content-Type': 'application/json' },
+        withCredentials: true
+    });
 
-  const editTeam = (id) =>{
+    const newTeamsArray = teams.filter(player => player.id !== id);
+    dispatch(setTeam(newTeamsArray));
+};
+
+
+  const editTeam = async (id) =>{
     const newTeamsArray = teams.map(player => player.id === id ? {...player, isEditing: !player.isEditing} : player);
     dispatch(setTeam(newTeamsArray));  }
 
@@ -108,9 +153,7 @@ export const TeamWrapper = () => {
         {message && <div className="alert">{message}</div>}
         <Team addTeam={addTeam} />
         {teams.map((player, index) =>
-          player.isEditing ? (
-            <EditTeam editTeam={editPlayer} task={player} key={index} />
-          ) : (
+           (
             <TeamDisplay task={player} key={index} deletePlayer={deletePlayer} editTeam={editTeam} />
           )
         )}

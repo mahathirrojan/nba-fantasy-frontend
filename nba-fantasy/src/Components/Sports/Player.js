@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { setFilteredPlayers, setPlayerDetails, setQuery, setPlayerStats } from '../../actions';
+import './Player.css';
 
 
 
@@ -107,8 +108,9 @@ const chatboxinfo = async () => {
 
   return (
     <div>
-      <div className="container">
-        <header className="header">
+      <div className="containers">
+        <section>
+        <header className="headers">
           <h1>NBA Player Search</h1>
         </header>
 
@@ -119,12 +121,12 @@ const chatboxinfo = async () => {
             value={query}
             onChange={handleChange}
           />
-          <button onClick={handleSearch}>Search</button>
+          <button className="button-search"onClick={handleSearch}>Search</button>
           
         </div>
-
+        </section>
         {id && playerDetails ? (
-          <div>
+          <div className="stats">
             <h2>{playerDetails.first_name} {playerDetails.last_name}</h2>
             <p>Height: {playerDetails.height_feet}' {playerDetails.height_inches}"</p>
             <p>Weight: {playerDetails.weight_pounds} lbs</p>
@@ -133,15 +135,15 @@ const chatboxinfo = async () => {
 
             {/* Display stats for the most recent game */}
             {mostRecentGame && (
-              <div>
+              <div className="stats">
                 <h3>Most Recent Game Stats</h3>
-                <p>Points (pts): {mostRecentGame.pts}</p>
-                <p>Assists (ast): {mostRecentGame.ast}</p>
-                <p>Blocks (blk): {mostRecentGame.blk}</p>
-                <p>Minutes (min): {mostRecentGame.min}</p>
-                <p>Rebounds (reb): {mostRecentGame.reb}</p>
-                <p>Steals (stl): {mostRecentGame.stl}</p>
-                <p>Turnovers (turnover): {mostRecentGame.turnover}</p>
+                <p>Points: {mostRecentGame.pts}</p>
+                <p>Assists: {mostRecentGame.ast}</p>
+                <p>Blocks: {mostRecentGame.blk}</p>
+                <p>Minutes Played: {mostRecentGame.min}</p>
+                <p>Rebounds: {mostRecentGame.reb}</p>
+                <p>Steals: {mostRecentGame.stl}</p>
+                <p>Turnovers: {mostRecentGame.turnover}</p>
               </div>
             )}
           </div>
@@ -158,34 +160,40 @@ const chatboxinfo = async () => {
             ))}
           </ul>
         )}
-        <button onClick={moreinformation}>Want More Infomation?</button>
+        <button className="button-more-information"onClick={moreinformation}>Want More Infomation?</button>
       </div>
-
+      <section className='ai-chat-box'>
+  
       <div className="chat-box">
+        <section className="ai-chat-box">
         
         <div>
-        {chatinfoOutput && <div className="chat-response">{chatinfoOutput}</div>}
+        {chatinfoOutput && <div className="chat-response-more">{chatinfoOutput}</div>}
         </div>
         <div>
+        <h1>Hello! I am your NBA Virtual Assistant</h1>
         <input
             type="text"
             placeholder="Ask Any Additional Questions You Have About Your Player: "
             value={chatBoxInput}
             onChange={handleChatChange}
           />
-          <button onClick={chatboxinfo}>Search</button>
+          <button onClick={chatboxinfo}>Submit</button>
           {chatBoxOutput && <div className="chat-response">{chatBoxOutput}</div>}
-
+          
         </div>
+        
+        
 
 
 
 
-
+        </section>
 
 
 </div>
-
+</section>
+            
     </div>
   );
 };
