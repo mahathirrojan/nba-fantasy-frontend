@@ -153,9 +153,7 @@ export const TeamWrapper = () => {
         {message && <div className="alert">{message}</div>}
         <Team addTeam={addTeam} />
         {teams.map((player, index) =>
-          player.isEditing ? (
-            <EditTeam editTeam={editPlayer} task={player} key={index} />
-          ) : (
+           (
             <TeamDisplay task={player} key={index} deletePlayer={deletePlayer} editTeam={editTeam} />
           )
         )}
