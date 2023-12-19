@@ -3,12 +3,9 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { setFilteredPlayers, setPlayerDetails, setQuery } from '../../actions'; // Make sure to import necessary actions
-import OpenAI from 'openai';
 
-const openai = new OpenAI({
-  apiKey: "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",
-  dangerouslyAllowBrowser: true } // This is also the default, can be omitted
-);
+
+
 
 const Player = () => {
   const navigate = useNavigate();
@@ -40,24 +37,27 @@ const [chatOutput, setChatOutput] = useState('');
 
   const handleSearch = async () => {
     try {
-      const response = await fetch(`https://www.balldontlie.io/api/v1/players?search=${query}`);
-      const data = await response.json();
-      const chatCompletion = await openai.chat.completions.create({
-        model: "gpt-3.5-turbo",
-        max_tokens: 1000,
-        messages: [{ "role": "user", "content":  `give me fun facts and awards gained by ${query}. in the repsonse only give me the infromation` }],
-    });
-    setChatOutput(chatCompletion.choices[0].message.content);
+        const response = await fetch(`https://www.balldontlie.io/api/v1/players?search=${query}`);
+        const data = await response.json();
+        
+        const chatResponse = await fetch('http://localhost:5001/getChatResponse', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ userInput: `give me fun facts and awards gained by ${query}. in the response only give me the information. Format it with bulletpoints` })
+        });
+        const chatData = await chatResponse.json();
 
-      dispatch(setFilteredPlayers(data.data));
+        setChatOutput(chatData);
 
-      if (data.data.length === 1) {
-        navigate(`/player/${data.data[0].id}`);
-      }
+        dispatch(setFilteredPlayers(data.data));
+        if (data.data.length === 1) {
+            navigate(`/player/${data.data[0].id}`);
+        }
     } catch (error) {
-      console.error('Error fetching player data:', error);
+        console.error('Error fetching player data:', error);
     }
-  };
+};
+
 
   const handleChange = (e) => {
     dispatch(setQuery(e.target.value));
