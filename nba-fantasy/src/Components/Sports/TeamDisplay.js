@@ -16,5 +16,3 @@ export const TeamDisplay = ({ task, deletePlayer, editTeam }) => {
     </div>
   );
 };
-
-export default TeamDisplay;
