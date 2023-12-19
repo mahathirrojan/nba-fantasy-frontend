@@ -76,12 +76,6 @@ input {
   width: 70%;
 }
 
-.chat-response {
-  margin-top: 10px;
-  padding: 10px;
-  background-color: #d4edda; 
-  border-radius: 4px;
-}
 
 
 .button-more-information {
@@ -136,5 +130,25 @@ input {
 }
 
 
+.ai-chat-box section{
+  background-color: #f0f0f0; /* Light gray background */
+  padding: 20px;
+  border-radius: 10px;
+  margin-top: 20px;
+}
 
+.chat-response-more {
+  background-color: #007bff; /* Blue background for chat response */
+  color: #fff; /* White text color */
+  padding: 10px;
+  border-radius: 5px;
+  margin-top: 10px;
+}
+
+.chat-response {
+  background-color: #e0e0e0; /* Lighter gray background for regular chat response */
+  padding: 10px;
+  border-radius: 5px;
+  margin-top: 10px;
+}
 

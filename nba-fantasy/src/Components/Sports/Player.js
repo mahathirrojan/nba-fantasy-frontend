@@ -162,14 +162,16 @@ const chatboxinfo = async () => {
         )}
         <button className="button-more-information"onClick={moreinformation}>Want More Infomation?</button>
       </div>
-
+      <section className='ai-chat-box'>
+  
       <div className="chat-box">
-        <section>
+        <section className="ai-chat-box">
         
         <div>
-        {chatinfoOutput && <div className="chat-response">{chatinfoOutput}</div>}
+        {chatinfoOutput && <div className="chat-response-more">{chatinfoOutput}</div>}
         </div>
         <div>
+        <h1>Hello! I am your NBA Virtual Assistant</h1>
         <input
             type="text"
             placeholder="Ask Any Additional Questions You Have About Your Player: "
@@ -190,6 +192,7 @@ const chatboxinfo = async () => {
 
 
 </div>
+</section>
             
     </div>
   );
