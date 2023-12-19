@@ -121,5 +121,8 @@ export const setFilteredPlayers = (array) => {
     payload: isSuccess,
   });
   
-  
+  export const setUserTeamID = (id) => ({
+    type: 'SET_USER_TEAM_ID',
+    payload: id,
+  });
   
