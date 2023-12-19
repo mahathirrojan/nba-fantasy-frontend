@@ -4,6 +4,9 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { setFilteredPlayers, setPlayerDetails, setQuery, setPlayerStats } from '../../actions';
 
+
+
+
 const Player = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -12,6 +15,11 @@ const Player = () => {
   const mostRecentGame = useSelector((state) => state.mostRecentGame); // Updated variable name
   const query = useSelector((state) => state.query);
   const { id } = useParams();
+ 
+  const [chatinfoOutput, setinfoChatOutput] = useState('');
+  const [chatBoxInput, setChatBoxInput] = useState('');
+  const [chatBoxOutput, setChatBoxOutput] = useState('');
+
 
   useEffect(() => {
     if (id) {
@@ -46,22 +54,56 @@ const Player = () => {
 
   const handleSearch = async () => {
     try {
-      const response = await fetch(`https://www.balldontlie.io/api/v1/players?search=${query}`);
-      const data = await response.json();
+        const response = await fetch(`https://www.balldontlie.io/api/v1/players?search=${query}`);
+        const data = await response.json();
+        
+       
 
-      dispatch(setFilteredPlayers(data.data));
-
-      if (data.data.length === 1) {
-        navigate(`/player/${data.data[0].id}`);
-      }
+        dispatch(setFilteredPlayers(data.data));
+        if (data.data.length === 1) {
+            navigate(`/player/${data.data[0].id}`);
+        }
     } catch (error) {
-      console.error('Error fetching player data:', error);
+        console.error('Error fetching player data:', error);
     }
-  };
+};
+
+
+const moreinformation = async () => {
+      const chatResponse = await fetch('http://localhost:5001/getChatResponse', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userInput: `give me fun facts and awards gained by ${query}. in the response only give me the information. Format it with bulletpoints. each bullet point in the new line` })
+    });
+      const chatData = await chatResponse.json();
+
+      setinfoChatOutput(chatData);
+}
+
+const chatboxinfo = async () => {
+  const chatResponse = await fetch('http://localhost:5001/getChatResponse', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ userInput: `for ${query} answer this question: ${chatBoxInput}` })
+});
+  const chatData = await chatResponse.json();
+
+  setChatBoxOutput(chatData);
+}
+
+
+
 
   const handleChange = (e) => {
     dispatch(setQuery(e.target.value));
   };
+
+  const handleChatChange = (e) => {
+    setChatBoxInput(e.target.value);
+  };
+
+
+
 
   return (
     <div>
@@ -78,6 +120,7 @@ const Player = () => {
             onChange={handleChange}
           />
           <button onClick={handleSearch}>Search</button>
+          
         </div>
 
         {id && playerDetails ? (
@@ -102,6 +145,8 @@ const Player = () => {
               </div>
             )}
           </div>
+          
+          
         ) : (
           <ul className="player-list">
             {filteredPlayers.map((player) => (
@@ -113,7 +158,34 @@ const Player = () => {
             ))}
           </ul>
         )}
+        <button onClick={moreinformation}>Want More Infomation?</button>
       </div>
+
+      <div className="chat-box">
+        
+        <div>
+        {chatinfoOutput && <div className="chat-response">{chatinfoOutput}</div>}
+        </div>
+        <div>
+        <input
+            type="text"
+            placeholder="Ask Any Additional Questions You Have About Your Player: "
+            value={chatBoxInput}
+            onChange={handleChatChange}
+          />
+          <button onClick={chatboxinfo}>Search</button>
+          {chatBoxOutput && <div className="chat-response">{chatBoxOutput}</div>}
+
+        </div>
+
+
+
+
+
+
+
+</div>
+
     </div>
   );
 };
