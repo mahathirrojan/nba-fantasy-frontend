@@ -15,7 +15,9 @@ const Player = () => {
   const query = useSelector((state) => state.query);
   const { id } = useParams();
  
-const [chatOutput, setChatOutput] = useState('');
+  const [chatinfoOutput, setinfoChatOutput] = useState('');
+  const [chatBoxInput, setChatBoxInput] = useState('');
+  const [chatBoxOutput, setChatBoxOutput] = useState('');
 
 
   useEffect(() => {
@@ -40,14 +42,7 @@ const [chatOutput, setChatOutput] = useState('');
         const response = await fetch(`https://www.balldontlie.io/api/v1/players?search=${query}`);
         const data = await response.json();
         
-        const chatResponse = await fetch('http://localhost:5001/getChatResponse', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ userInput: `give me fun facts and awards gained by ${query}. in the response only give me the information. Format it with bulletpoints` })
-        });
-        const chatData = await chatResponse.json();
-
-        setChatOutput(chatData);
+       
 
         dispatch(setFilteredPlayers(data.data));
         if (data.data.length === 1) {
@@ -59,8 +54,37 @@ const [chatOutput, setChatOutput] = useState('');
 };
 
 
+const moreinformation = async () => {
+      const chatResponse = await fetch('http://localhost:5001/getChatResponse', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userInput: `give me fun facts and awards gained by ${query}. in the response only give me the information. Format it with bulletpoints. each bullet point in the new line` })
+    });
+      const chatData = await chatResponse.json();
+
+      setinfoChatOutput(chatData);
+}
+
+const chatboxinfo = async () => {
+  const chatResponse = await fetch('http://localhost:5001/getChatResponse', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ userInput: `for ${query} answer this question: ${chatBoxInput}` })
+});
+  const chatData = await chatResponse.json();
+
+  setChatBoxOutput(chatData);
+}
+
+
+
+
   const handleChange = (e) => {
     dispatch(setQuery(e.target.value));
+  };
+
+  const handleChatChange = (e) => {
+    setChatBoxInput(e.target.value);
   };
 
 
@@ -81,6 +105,7 @@ const [chatOutput, setChatOutput] = useState('');
             onChange={handleChange}
           />
           <button onClick={handleSearch}>Search</button>
+          
         </div>
 
         {id && playerDetails ? (
@@ -91,6 +116,7 @@ const [chatOutput, setChatOutput] = useState('');
             <p>Position: {playerDetails.position}</p>
             <p>Team: {playerDetails.team.full_name}</p>
           </div>
+          
           
         ) : (
           <ul className="player-list">
@@ -103,9 +129,32 @@ const [chatOutput, setChatOutput] = useState('');
             ))}
           </ul>
         )}
+        <button onClick={moreinformation}>Want More Infomation?</button>
       </div>
+
       <div className="chat-box">
-    {chatOutput && <div className="chat-response">{chatOutput}</div>}
+        
+        <div>
+        {chatinfoOutput && <div className="chat-response">{chatinfoOutput}</div>}
+        </div>
+        <div>
+        <input
+            type="text"
+            placeholder="Ask Any Additional Questions You Have About Your Player: "
+            value={chatBoxInput}
+            onChange={handleChatChange}
+          />
+          <button onClick={chatboxinfo}>Search</button>
+          {chatBoxOutput && <div className="chat-response">{chatBoxOutput}</div>}
+
+        </div>
+
+
+
+
+
+
+
 </div>
 
     </div>
