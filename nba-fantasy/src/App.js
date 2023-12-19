@@ -27,7 +27,7 @@ function App() {
 
         <Routes>
           <Route
-            path="/login"
+            gitpath="/login"
             element={auth.user ? <Navigate to="/home" /> : <Login />}
           />
           <Route path="/register" element={<Register />} />

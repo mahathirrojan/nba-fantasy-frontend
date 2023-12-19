@@ -20,7 +20,9 @@ const initialState = {
     validMatch: false,
     matchFocus: false,
     errMsgRegister: '',
-    successRegister: false
+    successRegister: false,
+    playerStats: null,
+    mostRecentGame: null,
     
   };
   
@@ -69,6 +71,10 @@ const initialState = {
         return { ...state, errMsgRegister: action.payload };
       case 'SET_REGISTRATION_SUCCESS':
         return { ...state, successRegister: action.payload };
+      // New case for player stats
+      case 'SET_PLAYER_STATS':
+        return { ...state, mostRecentGame: action.payload };
+      
 
   
       default:
