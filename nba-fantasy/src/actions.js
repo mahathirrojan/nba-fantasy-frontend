@@ -18,6 +18,12 @@ export const setFilteredPlayers = (array) => {
     };
   };
 
+  // New player stats action
+  export const setPlayerStats = (stats) => ({
+    type: 'SET_PLAYER_STATS',
+    payload: stats,
+  });
+
 // team actions
   export const setValue1 = (value) => ({
     type: 'SET_VALUE1',
